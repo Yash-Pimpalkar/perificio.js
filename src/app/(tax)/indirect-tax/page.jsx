@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Indirecttax = () => {
+const page = () => {
   return (
     <div>
-      
+      indeirec
     </div>
   )
 }
 
-export default Indirecttax
+export default page

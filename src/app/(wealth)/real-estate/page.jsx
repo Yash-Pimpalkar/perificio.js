@@ -1,11 +1,12 @@
 import React from 'react'
 
-const Wealth = () => {
+const page = () => {
   return (
     <div>
-      
+      real esate
     </div>
   )
 }
 
-export default Wealth
+export default page
+

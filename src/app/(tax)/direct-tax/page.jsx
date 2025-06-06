@@ -1,11 +1,11 @@
 import React from 'react'
 
-const DirectTax = () => {
+const page = () => {
   return (
     <div>
-      
+      direct
     </div>
   )
 }
 
-export default DirectTax
+export default page

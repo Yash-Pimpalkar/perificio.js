@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Rera = () => {
+const page = () => {
   return (
     <div>
-      
+      rera
     </div>
   )
 }
 
-export default Rera
+export default page
