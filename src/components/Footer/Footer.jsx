@@ -1,102 +1,75 @@
-import React from 'react'
-const companyLinks = [
-  { label: 'About', href: '#' },
-  { label: 'Blog', href: '#' },
-  { label: 'Careers', href: '#' },
-  { label: 'Press', href: '#' },
-  { label: 'Partners', href: '#' },
-];
-const serviceLinks = [
-  { label: 'Insurance', href: '#' },
-  { label: 'Tax', href: '#' },
-  { label: 'Wealth', href: '#' },
-  { label: 'Compliance', href: '#' },
-  { label: 'NRI Services', href: '#' },
-];
-const toolLinks = [
-  { label: 'Calculators', href: '#' },
-  { label: 'Estimators', href: '#' },
-  { label: 'Planners', href: '#' },
-  { label: 'Knowledge Base', href: '#' },
-];
-const contactLinks = [
-  { label: 'Email', href: 'mailto:info@perificio.com', icon: '✉️' },
-  { label: 'Phone', href: 'tel:+911234567890', icon: '📞' },
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: '🔗' },
-  { label: 'Twitter', href: 'https://twitter.com', icon: '🐦' },
-  { label: 'Instagram', href: 'https://instagram.com', icon: '📸' },
-];
-const legalLinks = [
-  { label: 'Privacy Policy', href: '#' },
-  { label: 'Terms & Conditions', href: '#' },
-  { label: 'Cookie Policy', href: '#' },
-  { label: 'Sitemap', href: '#' },
-];
+import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="w-full min-h-screen flex flex-col justify-between bg-gray-50 text-gray-800 border-t border-gray-200">
-      <div className="flex-1 flex flex-col lg:flex-row gap-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-12">
-        {/* Company Info */}
-        <div className="flex-1 min-w-[180px] mb-8 lg:mb-0">
-          <h3 className="text-lg font-bold mb-4 text-blue-700">Company</h3>
+    <footer className="bg-[#032a5b] text-white px-6 md:px-20 py-12 text-sm">
+      <div className="flex flex-col lg:flex-row justify-between gap-10">
+        
+        {/* Logo & Contact */}
+        <div className="flex flex-col gap-4">
+          <img src="/logo-white.png" alt="Perificio Logo" className="w-28" />
+          <p className="text-white">+91-9699 800 600</p>
+          <p className="text-white">online@perificio.com</p>
+          <div className="flex gap-4 mt-2">
+            <a href="#"><i className="fab fa-facebook"></i></a>
+            <a href="#"><i className="fab fa-linkedin"></i></a>
+            <a href="#"><i className="fab fa-instagram"></i></a>
+            <a href="#"><i className="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        {/* Taxation */}
+        <div>
+          <h3 className="font-semibold mb-4">Taxation</h3>
           <ul className="space-y-2">
-            {companyLinks.map(link => (
-              <li key={link.label}><a href={link.href} className="hover:text-blue-600 transition">{link.label}</a></li>
-            ))}
+            <li><a href="#" className="hover:underline">Direct Tax</a></li>
+            <li><a href="#" className="hover:underline">Indirect Tax</a></li>
+            <li><a href="#" className="hover:underline">NCS</a></li>
+            <li><a href="#" className="hover:underline">RERA</a></li>
+            <li><a href="#" className="hover:underline">FEMA</a></li>
           </ul>
         </div>
-        {/* Services */}
-        <div className="flex-1 min-w-[180px] mb-8 lg:mb-0">
-          <h3 className="text-lg font-bold mb-4 text-blue-700">Services</h3>
+
+        {/* Wealth */}
+        <div>
+          <h3 className="font-semibold mb-4">Wealth</h3>
           <ul className="space-y-2">
-            {serviceLinks.map(link => (
-              <li key={link.label}><a href={link.href} className="hover:text-blue-600 transition">{link.label}</a></li>
-            ))}
+            <li><a href="#" className="hover:underline">Invest</a></li>
+            <li><a href="#" className="hover:underline">Real Estate</a></li>
+            <li><a href="#" className="hover:underline">NRI</a></li>
           </ul>
         </div>
-        {/* Tools */}
-        <div className="flex-1 min-w-[180px] mb-8 lg:mb-0">
-          <h3 className="text-lg font-bold mb-4 text-blue-700">Tools</h3>
+
+        {/* About Us */}
+        <div>
+          <h3 className="font-semibold mb-4">About Us</h3>
           <ul className="space-y-2">
-            {toolLinks.map(link => (
-              <li key={link.label}><a href={link.href} className="hover:text-blue-600 transition">{link.label}</a></li>
-            ))}
+            <li><a href="#" className="hover:underline">Safety Shield (Data Privacy)</a></li>
+            <li><a href="#" className="hover:underline">About Us</a></li>
+            <li><a href="#" className="hover:underline">Contact Us</a></li>
+            <li>
+              <div className="flex gap-2 mt-2">
+                <img src="/google-play-badge.png" alt="Google Play" className="w-24" />
+                <img src="/app-store-badge.png" alt="App Store" className="w-24" />
+              </div>
+            </li>
           </ul>
         </div>
-        {/* Contact & Socials */}
-        <div className="flex-1 min-w-[180px] mb-8 lg:mb-0">
-          <h3 className="text-lg font-bold mb-4 text-blue-700">Contact & Socials</h3>
-          <ul className="space-y-2">
-            {contactLinks.map(link => (
-              <li key={link.label} className="flex items-center gap-2">
-                <span>{link.icon}</span>
-                <a href={link.href} className="hover:text-blue-600 transition" target="_blank" rel="noopener noreferrer">{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Newsletter Signup */}
-        <div className="flex-1 min-w-[220px]">
-          <h3 className="text-lg font-bold mb-4 text-blue-700">Newsletter</h3>
-          <form className="flex flex-col gap-3">
-            <input type="email" placeholder="Your email address" className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded transition">Subscribe</button>
-          </form>
-          <p className="text-xs text-gray-500 mt-2">Get the latest updates and insights.</p>
-        </div>
+
+        
       </div>
-      {/* Legal & Copyright */}
-      <div className="border-t border-gray-200 py-6 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 flex flex-col md:flex-row items-center justify-between bg-white">
-        <div className="flex flex-wrap gap-4 mb-2 md:mb-0">
-          {legalLinks.map(link => (
-            <a key={link.label} href={link.href} className="text-sm hover:text-blue-600 transition">{link.label}</a>
-          ))}
-        </div>
-        <div className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Perificio. All rights reserved.</div>
+
+      {/* Disclaimer & Footer Bottom */}
+      <div className="border-t border-white/20 mt-10 pt-6 text-xs text-white/80">
+        <p className="mb-4">
+          Perificio Wealth Private Limited makes no warranties or representations on services provided. Investments are subject to market risk. Consult a certified financial advisor before acting on any information.
+        </p>
+        <p>
+          &copy; {new Date().getFullYear()} Perificio. All rights reserved.
+        </p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

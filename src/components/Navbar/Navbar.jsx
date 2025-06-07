@@ -13,7 +13,7 @@ const navLinks = {
       submenu: [
         { name: 'Direct Tax', href: '/direct-tax' },
         { name: 'InDirect Tax', href: '/indirect-tax' },
-        { name: 'WCA', href: '/wca' },
+        { name: 'NCA', href: '/wca' },
         { name: 'RERA', href: '/rera' },
         { name: 'FEMA', href: '/fema' }
       ]
@@ -21,12 +21,14 @@ const navLinks = {
     { 
       name: 'Wealth', 
       href: '/wealth',
+      
       submenu: [
         { name: 'Trust', href: '/trust' },
         { name: 'Real Estate', href: '/real-estate' },
         { name: 'WRI', href: '/wri' },
       ]
     },
+    { name: 'Insurance', href: '/insurance' },
     { name: 'About Us', href: '/about' },
     { name: 'Contact Us', href: '/contact' },
   ],
