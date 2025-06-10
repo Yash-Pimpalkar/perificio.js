@@ -1,6 +1,12 @@
-import React from 'react';
+'use client'; // This directive is crucial for using React Hooks like useEffect and useState in Next.js
 
-const Homepage = () => {
+import React, { useState, useEffect } from 'react';
+import Chatbot from '../../components/Chatbot'; // Corrected path for Chatbot component
+
+function Homepage() {
+  // State for chatbot visibility
+  const [showChatbot, setShowChatbot] = useState(false);
+
   const testimonials = [
     {
       quote: "Their team helped me structure my term and health cover optimally—saved tax and gave peace of mind.",
@@ -23,7 +29,7 @@ const Homepage = () => {
     {
       title: 'Insurance Advisory',
       description: 'Term & Health Insurance | Tax-Benefit Focused',
-      icon: '🛡️'
+      icon: '�️'
     },
     {
       title: 'Taxation Services',
@@ -84,9 +90,224 @@ const Homepage = () => {
     }
   ];
 
+  // --- Market Watch Data ---
+  // Initializing with dummy data so the scrollers are never empty on first load
+  const initialCapitalData = [
+    { name: 'AXISBANK', current: 105.50, change: 0.50, percentChange: 0.05, status: 'positive' },
+    { name: 'BAJAJ-AUTO', current: 9555.00, change: 37.50, percentChange: 0.39, status: 'positive' },
+    { name: 'BAJAJFINSV', current: 1980.70, change: 44.70, percentChange: 2.30, status: 'positive' },
+    { name: 'BAJFINANCE', current: 9372.00, change: 438.00, percentChange: 4.90, status: 'positive' },
+    { name: 'BEL', current: 281.90, change: -2.80, percentChange: -0.98, status: 'negative' },
+    { name: 'BHARTIARTL', current: 1370.10, change: -8.70, percentChange: -0.63, status: 'negative' },
+    { name: 'DRREDDY', current: 6500.00, change: 10.00, percentChange: 0.15, status: 'positive' },
+    { name: 'GRASIM', current: 2300.00, change: -15.00, percentChange: -0.65, status: 'negative' },
+  ];
+
+  const initialMutualFundData = [
+    { name: 'SBI Bluechip Fund', nav: 52.35, change: 0.15, percentChange: 0.29, status: 'positive' },
+    { name: 'HDFC Mid-Cap Opp.', nav: 180.12, change: -0.50, percentChange: -0.28, status: 'negative' },
+    { name: 'ICICI Pru. Flexicap', nav: 45.78, change: 0.30, percentChange: 0.66, status: 'positive' },
+    { name: 'Mirae Asset Large Cap', nav: 70.05, change: 0.02, percentChange: 0.03, status: 'positive' },
+    { name: 'Axis Small Cap', nav: 70.05, change: -0.02, percentChange: -0.03, status: 'negative' },
+    { name: 'Kotak Equity Hybrid', nav: 70.05, change: 0.12, percentChange: 0.17, status: 'positive' },
+    { name: 'Parag Parikh Flexi', nav: 70.05, change: 0.08, percentChange: 0.11, status: 'positive' },
+    { name: 'Canara Robeco Bluechip', nav: 70.05, change: -0.05, percentChange: -0.07, status: 'negative' },
+  ];
+
+  const initialCurrencyData = [
+    { name: 'USD/INR', rate: 83.50, change: -0.05, percentChange: -0.06, status: 'negative' },
+    { name: 'EUR/INR', rate: 90.10, change: 0.12, percentChange: 0.13, status: 'positive' },
+    { name: 'GBP/INR', rate: 106.20, change: 0.08, percentChange: 0.08, status: 'positive' },
+    { name: 'JPY/INR', rate: 0.537, change: 0.001, percentChange: 0.19, status: 'positive' },
+  ];
+
+  const [capitalMarketData, setCapitalMarketData] = useState(initialCapitalData);
+  const [mutualFundData, setMutualFundData] = useState(initialMutualFundData);
+  const [currencyExchangeData, setCurrencyExchangeData] = useState(initialCurrencyData);
+
+  // ** API KEYS ARE NOW SET **
+  const ALPHA_VANTAGE_API_KEY = 'W5P8D6BWTJSP0K59';
+  const EXCHANGE_RATE_API_KEY = '652799a528644db32390372f'; // Assuming this is for ExchangeRate-API or similar
+
+  useEffect(() => {
+    const fetchCapitalMarketData = async () => {
+      try {
+        const symbols = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'AMZN']; // Examples of global stocks
+        const fetchedStocks = [];
+
+        for (const symbol of symbols) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`);
+          const data = await response.json();
+
+          if (data['Global Quote'] && data['Global Quote']['01. symbol']) {
+            const quote = data['Global Quote'];
+            const name = quote['01. symbol'];
+            const current = parseFloat(quote['05. price']);
+            const change = parseFloat(quote['09. change']);
+            const percentChange = parseFloat(quote['10. change percent'].replace('%', ''));
+
+            fetchedStocks.push({
+              name: name,
+              current: current,
+              change: change,
+              percentChange: percentChange,
+              status: change >= 0 ? 'positive' : 'negative'
+            });
+          } else {
+            console.warn(`Alpha Vantage: Could not fetch data for ${symbol}. Data:`, data);
+          }
+        }
+        // Only update if fetched data is not empty, otherwise keep existing (dummy) data
+        if (fetchedStocks.length > 0) {
+          setCapitalMarketData(fetchedStocks);
+        } else {
+          console.warn("Alpha Vantage: No capital market data fetched, retaining dummy data.");
+          setCapitalMarketData(initialCapitalData); // Revert to initial dummy if fetch fails
+        }
+
+      } catch (error) {
+        console.error('Error fetching capital market data:', error);
+        setCapitalMarketData(initialCapitalData); // Fallback to dummy data on network error
+      }
+    };
+
+    const fetchMutualFundData = async () => {
+      // Mutual fund data fetching logic (currently using dummy data)
+      // This function can be expanded later if a suitable API is found.
+      setMutualFundData(initialMutualFundData); // Always use dummy data for now
+    };
+
+    const fetchLiveCurrencyExchangeData = async () => {
+      try {
+        const currencyPairs = [
+          { from: 'USD', to: 'INR' },
+          { from: 'EUR', to: 'INR' },
+          { from: 'GBP', to: 'INR' },
+          { from: 'JPY', to: 'INR' }
+        ];
+
+        const fetchedCurrencies = [];
+        for (const pair of currencyPairs) {
+          // Using ExchangeRate-API for direct currency conversion
+          const response = await fetch(`https://v6.exchangerate-api.com/v6/${EXCHANGE_RATE_API_KEY}/pair/${pair.from}/${pair.to}`);
+          const data = await response.json();
+
+          if (data.result === 'success' && data.conversion_rate) {
+            const rate = parseFloat(data.conversion_rate); // Ensure rate is a number
+
+            // Simulating a small random change for dynamic appearance
+            const simulatedChange = (Math.random() * 0.1 * (Math.random() > 0.5 ? 1 : -1));
+            const simulatedPercentChange = (simulatedChange / rate) * 100;
+            const status = simulatedChange >= 0 ? 'positive' : 'negative';
+
+            fetchedCurrencies.push({
+              name: `${pair.from}/${pair.to}`,
+              rate: rate,
+              change: simulatedChange,
+              percentChange: simulatedPercentChange,
+              status: status
+            });
+          } else {
+            console.warn(`ExchangeRate-API: Could not fetch currency for ${pair.from}/${pair.to}. Data:`, data);
+          }
+        }
+
+        // Only update if fetched data is not empty, otherwise keep existing (dummy) data
+        if (fetchedCurrencies.length > 0) {
+          setCurrencyExchangeData(fetchedCurrencies);
+        } else {
+          console.warn("ExchangeRate-API: No currency exchange data fetched, retaining dummy data.");
+          setCurrencyExchangeData(initialCurrencyData); // Revert to initial dummy if fetch fails
+        }
+
+      } catch (error) {
+        console.error('Error fetching live currency exchange data:', error);
+        setCurrencyExchangeData(initialCurrencyData); // Fallback to dummy data on network error
+      }
+    };
+
+    // Initial fetch
+    fetchCapitalMarketData();
+    fetchMutualFundData();
+    fetchLiveCurrencyExchangeData();
+
+    // Set up interval for continuous refresh
+    // Be mindful of API rate limits!
+    const interval = setInterval(() => {
+      fetchCapitalMarketData();
+      fetchMutualFundData();
+      fetchLiveCurrencyExchangeData();
+    }, 60000); // Refresh every 60 seconds (1 minute)
+
+    return () => clearInterval(interval); // Clean up on unmount
+  }, [ALPHA_VANTAGE_API_KEY, EXCHANGE_RATE_API_KEY]); // Dependencies on both API keys
+
+  // Consolidated render function for a single scrolling row of market data
+  const renderMarketScroller = (data, animationSpeed, type) => {
+    // Duplicate data for continuous scrolling
+    
+    const duplicatedData = Array.isArray(data) ? data.concat(data) : [];
+
+    // If there's no data even after duplication, show a fallback message.
+    // This is primarily for when initial data is completely empty and APIs fail.
+    if (duplicatedData.length === 0) {
+      return (
+        <div className="w-full text-center py-4 text-gray-500">
+          No {type} data available at the moment. Please check back later.
+        </div>
+      );
+    }
+
+    return (
+      // The 'group' class enables group-hover on child elements
+      <div className="w-full overflow-hidden relative group py-2">
+        <div
+          // Added 'group-hover:[animation-play-state:paused]' here
+          className="flex gap-2 md:gap-4 min-w-max px-2 sm:px-4 md:px-8 animate-scroll-market-data group-hover:[animation-play-state:paused]"
+          style={{ animation: `scroll-market-data ${animationSpeed}s linear infinite` }}
+        >
+          {duplicatedData.map((item, index) => {
+            let valueToDisplay;
+            switch (type) {
+              case 'currency':
+                valueToDisplay = item.rate?.toFixed(3) || 'N/A'; // Use optional chaining
+                break;
+              case 'capital':
+                valueToDisplay = item.current?.toFixed(2) || 'N/A';
+                break;
+              case 'mutual-fund':
+                valueToDisplay = item.nav?.toFixed(2) || 'N/A';
+                break;
+              default:
+                valueToDisplay = 'N/A';
+            }
+
+            return (
+              <div
+                key={`${item.name}-${type}-${index}`} // Unique key
+                className={`flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px] bg-white rounded-lg p-2 shadow-sm flex items-center justify-between text-xs sm:text-sm border
+                  ${item.status === 'positive' ? 'text-green-600 border-green-200' : 'text-red-600 border-red-200'}`}
+              >
+                <div className="font-semibold truncate max-w-[80px] sm:max-w-[100px]">{item.name}</div>
+                <div className="flex flex-col items-end">
+                  <span className="font-bold">
+                    {valueToDisplay}
+                  </span>
+                  <span className="text-xs">
+                    {item.change?.toFixed(2) || 'N/A'} ({item.percentChange?.toFixed(2) || 'N/A'}%)
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-inter"> {/* Apply Inter font globally */}
-      {/* Dynamic Services Advertising Banner with Rolling Cards */}
+    <div className="min-h-screen bg-white text-gray-900 font-inter relative"> {/* Added relative for chatbot positioning */}
+      {/* Dynamic Services Advertising Banner with Rolling Cards  */}
       <section className="w-full min-h-[80vh] flex flex-col items-center justify-center px-4 md:px-6 lg:px-20 py-12 md:py-16 bg-gradient-to-br from-[#E0F2FE] to-[#BFDBFE] text-[#1D4ED8] text-center">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-montserrat font-extrabold leading-tight mb-4 max-w-4xl">
           Simplify Your Compliance & Financial Filings
@@ -127,6 +348,7 @@ const Homepage = () => {
           </h2>
 
           <div className="overflow-x-auto hide-scrollbar">
+            {/* Added group-hover to the parent of the scrolling div */}
             <div className="flex gap-4 md:gap-6 min-w-max px-2 sm:px-4 md:px-8 animate-scroll group-hover:[animation-play-state:paused]"
               style={{ animation: 'scroll 60s linear infinite' }}>
               {testimonials.concat(testimonials).map((testimonial, index) => (
@@ -151,6 +373,36 @@ const Homepage = () => {
         </div>
       </section>
 
+      {/* Market Watch Section */}
+      <section className="py-8 md:py-12 bg-gray-50 border-b border-t border-gray-200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-xl md:text-2xl font-montserrat font-bold text-center mb-6 text-[#1D4ED8]">
+            Market Watch
+          </h2>
+
+          <div className="space-y-4"> {/* Container for the three scrolling rows */}
+            {/* Capital Market Row */}
+            <div className="mb-2">
+              <h3 className="text-lg font-semibold text-gray-700 mb-2 text-center">Capital Market</h3>
+              {/* `renderMarketScroller` already includes the group-hover logic */}
+              {renderMarketScroller(capitalMarketData, 30, 'capital')}
+            </div>
+
+            {/* Mutual Funds Row */}
+            <div className="mb-2">
+              <h3 className="text-lg font-semibold text-gray-700 mb-2 text-center">Mutual Funds</h3>
+              {renderMarketScroller(mutualFundData, 25, 'mutual-fund')}
+            </div>
+
+            {/* Currency Exchange Row */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2 text-center">Currency Exchange</h3>
+              {renderMarketScroller(currencyExchangeData, 20, 'currency')}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Blog/Knowledge Base Section */}
       <section className="py-12 md:py-20 bg-[#F8FAFC]"> {/* Very light gray background */}
         <div className="container mx-auto px-4 text-center">
@@ -162,7 +414,7 @@ const Homepage = () => {
               <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 w-full max-w-sm overflow-hidden">
                 <div className="relative">
                   <img src={post.image} alt={post.title} className="w-full h-40 sm:h-48 object-cover" />
-                  {/* Perficio Name/Logo overlay similar to Fintoo in reference image */}
+                  {/* Perficio Name/Logo overlay */}
                   <div className="absolute top-3 right-3 bg-white/70 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-semibold text-gray-800 border border-gray-200">
                     PERFICIO
                   </div>
@@ -240,6 +492,26 @@ const Homepage = () => {
         </div>
       </section>
 
+      {/* Floating Help Button */}
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="fixed bottom-6 right-6 bg-[#B91C1C] text-white p-4 rounded-full shadow-lg hover:bg-[#DC2626] transition-all duration-300 z-50 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#B91C1C] focus:ring-offset-2 flex items-center justify-center space-x-2 text-lg font-semibold px-6 py-3" // Adjusted styling for a wider button with text
+        aria-label={showChatbot ? "Close Help" : "Open Help"}
+      >
+        {/* Help icon (simple question mark or speech bubble) */}
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+        </svg>
+        <span>Help</span>
+      </button>
+
+      {/* Chatbot Modal/Panel */}
+      {showChatbot && (
+        <div className="fixed bottom-24 right-6 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-[450px] sm:h-[500px] md:h-[550px] bg-white rounded-lg shadow-2xl z-40 transition-transform transform origin-bottom-right duration-300 ease-out animate-slide-up">
+          <Chatbot services={services} />
+        </div>
+      )}
+
       <style>
         {`
           /* Import Google Fonts */
@@ -253,6 +525,7 @@ const Homepage = () => {
             font-family: 'Montserrat', sans-serif;
           }
 
+          /* Keyframes for continuous scrolling */
           @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -261,13 +534,38 @@ const Homepage = () => {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
           }
+          /* This animation is used for all market data scrollers */
+          @keyframes scroll-market-data {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+
+          /* Chatbot slide-up animation */
+          @keyframes slide-up {
+            from {
+              opacity: 0;
+              transform: translateY(20px) scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
+
+          .animate-slide-up {
+            animation: slide-up 0.3s ease-out forwards;
+          }
+
+          /* Hide scrollbar */
           .hide-scrollbar::-webkit-scrollbar {
             display: none;
           }
           .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
           }
+
+          /* Line clamping utilities */
           .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -284,6 +582,6 @@ const Homepage = () => {
       </style>
     </div>
   );
-};
+}
 
 export default Homepage;
