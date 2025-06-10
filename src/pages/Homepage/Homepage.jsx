@@ -124,6 +124,12 @@ function Homepage() {
   const [capitalMarketData, setCapitalMarketData] = useState(initialCapitalData);
   const [mutualFundData, setMutualFundData] = useState(initialMutualFundData);
   const [currencyExchangeData, setCurrencyExchangeData] = useState(initialCurrencyData);
+const bannerImages = [
+  { src: '/assets/gst-banner.png', url: '/services/gst' },
+  { src: '/assets/itr-banner.png', url: '/services/itr' },
+  { src: '/assets/rera-banner.png', url: '/services/rera' },
+];
+
 
   // ** API KEYS ARE NOW SET **
   const ALPHA_VANTAGE_API_KEY = 'W5P8D6BWTJSP0K59';
@@ -308,37 +314,40 @@ function Homepage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 font-inter relative"> {/* Added relative for chatbot positioning */}
       {/* Dynamic Services Advertising Banner with Rolling Cards  */}
-      <section className="w-full min-h-[80vh] flex flex-col items-center justify-center px-4 md:px-6 lg:px-20 py-12 md:py-16 bg-gradient-to-br from-[#E0F2FE] to-[#BFDBFE] text-[#1D4ED8] text-center">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-montserrat font-extrabold leading-tight mb-4 max-w-4xl">
-          Simplify Your Compliance & Financial Filings
-        </h1>
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 max-w-2xl mb-8 md:mb-12">
-          Get expert assistance for ITR, GST, RERA, and more, all at unbeatable prices!
-        </p>
+     <section className="w-full min-h-screen flex flex-col items-center justify-center px-4 md:px-6 lg:px-20 py-12 md:py-16 bg-gradient-to-br from-[#E0F2FE] to-[#BFDBFE] text-[#1D4ED8] text-center">
 
-        <div className="w-full overflow-hidden relative group py-4 md:py-8">
-          <div className="flex gap-4 md:gap-8 min-w-max px-2 sm:px-4 md:px-8 animate-scroll-ads group-hover:[animation-play-state:paused]"
-            style={{ animation: 'scroll-ads 60s linear infinite' }}>
-            {rollingServiceCards.concat(rollingServiceCards).map((card, index) => ( // Duplicated for seamless loop
-              <div key={index} className="w-[300px] sm:w-[400px] md:w-[600px] lg:w-[820px] h-[200px] sm:h-[250px] md:h-[300px] lg:h-[312px] flex-shrink-0 bg-white border border-[#BFDBFE] rounded-xl p-4 sm:p-6 md:p-8 shadow-xl flex flex-col sm:flex-row items-center justify-center sm:justify-between text-center sm:text-left hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="text-5xl sm:text-6xl md:text-7xl mb-4 sm:mb-0 sm:mr-8 flex-shrink-0">
-                  {card.icon}
-                </div>
-                <div className="flex-1 flex flex-col justify-center h-full">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-montserrat font-bold text-[#1D4ED8] mb-1 sm:mb-2">{card.mainService}</h3>
-                  <p className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed">{card.tagline}</p>
-                </div>
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-montserrat font-extrabold text-[#B91C1C] mt-4 sm:mt-0 sm:ml-8 flex-shrink-0">
-                  {card.price}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <a href="#contact" className="mt-8 md:mt-12 inline-block bg-[#B91C1C] hover:bg-[#DC2626] text-white font-montserrat font-semibold px-6 py-3 md:px-10 md:py-5 rounded-lg shadow-xl transition transform hover:scale-105 text-base md:text-lg">
-          Explore All Services & Get Started
-        </a>
-      </section>
+  <div className="w-full overflow-hidden relative group py-4 md:py-8">
+    <div
+      className="flex gap-4 md:gap-8 min-w-max px-2 sm:px-4 md:px-8 animate-scroll-ads group-hover:[animation-play-state:paused]"
+      style={{ animation: 'scroll-ads 60s linear infinite' }}
+    >
+      {[...bannerImages, ...bannerImages].map((banner, index) => (
+       <a
+  key={index}
+  href={banner.url}
+  className="w-full max-w-[90vw] sm:max-w-[80vw] lg:max-w-[75vw] aspect-[16/9] flex-shrink-0 overflow-hidden rounded-xl"
+  target="_self"
+>
+  <img
+    src={banner.src}
+    alt={`Banner ${index + 1}`}
+    className="w-full h-full object-cover shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+    loading="lazy"
+  />
+</a>
+
+      ))}
+    </div>
+  </div>
+
+  <a
+    href="#contact"
+    className="mt-8 md:mt-12 inline-block bg-[#B91C1C] hover:bg-[#DC2626] text-white font-montserrat font-semibold px-6 py-3 md:px-10 md:py-5 rounded-lg shadow-xl transition transform hover:scale-105 text-base md:text-lg"
+  >
+    Explore All Services & Get Started
+  </a>
+</section>
+
 
       {/* Testimonials Section */}
       <section className="py-12 md:py-20 bg-white">
